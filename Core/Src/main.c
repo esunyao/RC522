@@ -21,6 +21,8 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "rc522.h"
+#include "string.h"
 
 /* USER CODE END Includes */
 
@@ -43,7 +45,9 @@
 SPI_HandleTypeDef hspi1;
 
 /* USER CODE BEGIN PV */
-
+uint8_t status;
+uint8_t str[MAX_LEN]; // Max_LEN = 16
+uint8_t sNum[5];
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -90,7 +94,7 @@ int main(void)
   MX_GPIO_Init();
   MX_SPI1_Init();
   /* USER CODE BEGIN 2 */
-
+    MFRC522_Init();
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -100,6 +104,10 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+      status = MFRC522_Request(PICC_REQIDL, str);
+      status = MFRC522_Anticoll(str);
+      memcpy(sNum, str, 5);
+      HAL_Delay(100);
   }
   /* USER CODE END 3 */
 }
